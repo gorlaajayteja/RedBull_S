@@ -8,6 +8,7 @@ public class RedBullv2 {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RedBullv2 .class, args);
+		System.out.println(InstructionMassages.greeting);
 		
 		
 	}
