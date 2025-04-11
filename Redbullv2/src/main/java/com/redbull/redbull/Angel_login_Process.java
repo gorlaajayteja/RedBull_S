@@ -42,23 +42,49 @@ public class Angel_login_Process {
             ).click();
             log.info("Clicked on Proceed (Mobile)");
 
-            // Wait for OTP input field
+            // Wait for pin input field
             WebElement OTP_entry_box = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.xpath(Angel_Urls_and_Xpaths.Xpath_OTP_entry))
             );
-
-            // Ask user to enter OTP
+            
+         // Ask user to enter OTP
             Scanner sc = new Scanner(System.in);
             System.out.println("PLEASE ENTER THE OTP:");
             String OTP = sc.nextLine();
             OTP_entry_box.sendKeys(OTP);
             log.info("Entered OTP");
 
+
             // Click on Proceed for OTP
             wait.until(
                 ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Clickon_Proceed_OTP))
             ).click();
             log.info("Clicked on Proceed (OTP)");
+           
+            // Click on PIN
+            WebElement PIn_entry_box = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath(Angel_Urls_and_Xpaths.Xpath_Pin_Entry))
+                );
+            PIn_entry_box.sendKeys(Default_User_info.Angel_Pin);
+            log.info("Entered pin number");
+            
+            // Clink on proceed after enter the pin
+            
+            
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Clickon_Proceed_PIN))).click();
+            log.info("Clicked on Proceed (PIN)");
+            
+            // click on Gotit 
+            
+            Thread.sleep(5000);
+            
+            driver.get(Angel_Urls_and_Xpaths.Url_CharPage);
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Gotit_Button))).click();
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Option_Introduction_NotNow))).click();
+            
+            
+            
+            
 
         } catch (TimeoutException e) {
             log.error("Timeout while waiting for an element. Please check your network or page response time.", e);

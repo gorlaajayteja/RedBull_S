@@ -13,7 +13,6 @@ public class RedBullv2 {
 		Angel_login_Process.login();
 		System.out.println(User_info_Collection.Name);
 		
-		
 	}
 
 }
