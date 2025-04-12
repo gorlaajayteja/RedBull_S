@@ -81,7 +81,7 @@ public class Angel_login_Process {
             driver.get(Angel_Urls_and_Xpaths.Url_CharPage);
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Gotit_Button))).click();
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Option_Introduction_NotNow))).click();
-            
+            log.info("Login process completd");
             
             
             
