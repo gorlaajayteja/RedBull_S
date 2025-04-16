@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,47 +21,60 @@ public class ChartReader_Frame2_Shift {
     public static Map<String, Double> frameToframe() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
         driver.get("https://www.angelone.in/trade/watchlist/chart");
+        System.out.println("Please update the changes in Char maualy");
+        Thread.sleep(15000);
+        driver.get("https://www.angelone.in/trade/watchlist/chart");
+        
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
      
         // Switching to the first iframe where chart is expected to be located
         WebElement iframe1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='scrip chart']")));
         driver.switchTo().frame(iframe1);
-        System.out.println("Loading Frame 1............");
+        log.info("Scirpt Chat Loaded");
 
         // Switching to the second nested iframe where financial details are displayed
         WebElement iframe2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='Financial Chart']")));
         driver.switchTo().frame(iframe2);
-        System.out.println("Loading Frame 2............");
+        log.info("frame2 financial fram activated");
         
+
         
-        driver.switchTo().defaultContent();
+//        driver.switchTo().defaultContent();
+//        log.info("Defult fram activated");
         
-       
         
         // Prepare a map to hold the data
         Map<String, Double> indicators = new HashMap<>();
         
         // Collecting the data
-        indicators.put("SuperTrend", getIndicatorValue(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[2]/div[2]/div[2]/div[2]/div[2]/div/div[1]/div"));
-        System.out.println("SuperTrend--> Loaded");
         
-        indicators.put("RSI", getIndicatorValue(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[3]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div"));
-        System.out.println("RSI --> Loaded");
+        indicators.put("ADX", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_ADX));
+        log.info("ADX Value: ");
         
-        indicators.put("ADX", getIndicatorValue(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div/div"));
-        System.out.println("ADX Loaded");
+        indicators.put("FisgerGreen", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_FisherGreen));
+        log.info("Fisher Green: ");
         
-        indicators.put("FA", getIndicatorValue(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div"));
-        System.out.println("Fisher A --> Loaded");
+        indicators.put("FisherRed", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_FisherRed));
+        log.info("Fisher Red: ");
         
-        indicators.put("FB",getIndicatorValue(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div"));
-        System.out.println("FB --> Loaded");
+        indicators.put("RSI", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_RSI));
+        log.info("RSI: ");
         
-        indicators.put("ORBH",getIndicatorValue(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div"));
-        System.out.println("ORBH --> Loaded");
+        indicators.put("ORBH", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_ORBHigh));
+        log.info("ORBH: ");
         
-        indicators.put("ORBL",getIndicatorValue(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div"));
-        System.out.println("ORBL --> Loaded");
+        indicators.put("ORBL", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_ORBlow));
+        log.info("ORBL: ");
+        
+        indicators.put("MACD", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_MACDmiddel));
+        log.info("MACD: ");
+        
+        indicators.put("MACDG", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_MACDGreen));
+        log.info("ORBL: ");
+        
+        indicators.put("MACDR", getIndicatorValue(wait, Angel_Urls_and_Xpaths.Xpath_MACDRed));
+        log.info("ORBL: ");
+        
         
         return indicators;
     }
