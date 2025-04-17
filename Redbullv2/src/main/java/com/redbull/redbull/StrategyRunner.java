@@ -32,11 +32,11 @@ public class StrategyRunner {
 
                 // Step 4 & 5: Compare FA and FB, and call respective methods
                 if (fa > fb) {
-                    logger.info("📈 Buy Signal (FA > FB)");
-                    Buy_Sell_Implemetation.buy();
+                    logger.info("📈 Buy CE Signal (FA > FB)");
+                    Buy_Sell_Implemetation.buyCE();
                 } else if (fa < fb) {
-                    logger.info("📉 Sell Signal (FA < FB)");
-                    Buy_Sell_Implemetation.sell();
+                    logger.info("📉 Buy PE Signal (FA < FB)");
+                    Buy_Sell_Implemetation.buyPE();
                 } else {
                     logger.info("⚖️ No Clear Signal (FA == FB)");
                 }

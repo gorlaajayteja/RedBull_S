@@ -37,7 +37,7 @@ public class ChartReader_Frame2_Shift {
 
         // Collect indicator values
         Map<String, Double> indicatorValues = collectIndicatorValues(driver);
-
+        driver.switchTo().defaultContent();
         // Output the collected values without additional debug information
 //        indicatorValues.forEach((key, value) -> System.out.println(key + ": " + value));
 
