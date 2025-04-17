@@ -25,7 +25,7 @@ public class Angel_Urls_and_Xpaths {
 	public static String Xpath_RSI = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[3]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div";
 	public static String Xpath_FisherGreen = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div";
 	public static String Xpath_FisherRed = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div";
-	public static String Xpath_ADX = "	";
+	public static String Xpath_ADX = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div";
 	public static String Xpath_MACDmiddel = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div";
 	public static String Xpath_MACDGreen = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div";
 	public static String Xpath_MACDRed = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[3]/div";

@@ -13,8 +13,7 @@ public class RedBullv2 {
 		System.out.println(InstructionMassages.greeting);
 		System.out.println(InstructionMassages.Redbull_Activated);
 		Angel_login_Process.login();
-		Map<String, Double> indicatorValues = ChartReader_Frame2_Shift.frameToframe();
-		System.out.println(indicatorValues);
+        StrategyRunner.runADX_FABStrategy();
 	}
 
 }
