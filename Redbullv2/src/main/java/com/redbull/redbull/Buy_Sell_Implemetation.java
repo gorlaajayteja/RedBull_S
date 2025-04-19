@@ -3,8 +3,12 @@ package com.redbull.redbull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
 
 public class Buy_Sell_Implemetation {
 
@@ -12,68 +16,94 @@ public class Buy_Sell_Implemetation {
 
     public static void buyCE() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
-        driver.get("https://www.angelone.in/trade/watchlist/chart");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        handleToggleState(driver, "B", "CALL", "MKT.");
+//        driver.get("https://www.angelone.in/trade/watchlist/chart");
+        driver.switchTo().defaultContent();
+
+        WebElement optionTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".px-3.w-\\[3\\.625rem\\].flex.justify-center.leading-5.items-center.font-semibold.py-1.border.border-skin-blue.text-skin-select.rounded-md.bg-skin-grey.text-13.h-8")));
+
+        WebElement orderTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|ordertype_toggle|MARKET}\"]")));
+       
+        String optionTypeText = optionTypeToggle.getText().trim();
+        String orderTypeText = orderTypeToggle.getText().trim();
+
+        logger.info("✅ Found Option Type Toggle | Text: {}", optionTypeText);
+        logger.info("✅ Found Order Type Toggle | Text: {}", orderTypeText);
+
+        if (!optionTypeText.equalsIgnoreCase("CALL")) {
+            optionTypeToggle.click();
+            logger.info("🔁 Changed Option Type to CALL");
+        }
+
+        if (!orderTypeText.equalsIgnoreCase("MKT.")) {
+            orderTypeToggle.click();
+            logger.info("🔁 Changed Order Type to MKT.");
+        }
+     // Step 1: Click the dynamic "BUY @" button
+        WebElement buyButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[starts-with(@id, 'b/s_underlying|place_order|BUY_')]")));
+            
+        String buyText = buyButton.getText();
+        logger.info("🟢 BUY Button Found: {}", buyText);
+        buyButton.click();
+
+        // Step 2: Wait for "CONFIRM ORDER" button to appear
+        WebElement confirmButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(), 'CONFIRM ORDER')]") ));
+       
+
+        // Optional: Verify it's enabled (sometimes appears disabled first)
+        wait.until(ExpectedConditions.elementToBeClickable(confirmButton));
+
+        // Step 3: Click "CONFIRM ORDER"
+        logger.info("🟦 Confirm Order Button Found: {}", confirmButton.getText());
+        confirmButton.click();
     }
 
     public static void buyPE() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
-        driver.get("https://www.angelone.in/trade/watchlist/chart");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        handleToggleState(driver, "S", "PUT", "MKT.");
-    }
+//        driver.get("https://www.angelone.in/trade/watchlist/chart");
+        driver.switchTo().defaultContent();
 
-    private static void handleToggleState(WebDriver driver, String expectedB1, String expectedB2, String expectedB3) throws InterruptedException {
-        // --- B1 Toggle Check (B or S) ---
-        try {
-            WebElement checkbox = driver.findElement(By.id("b/s_underlying|transactiontype_toggle|S"));
-            boolean isSell = checkbox.isSelected();
-            boolean shouldBeSell = expectedB1.equalsIgnoreCase("S");
+        WebElement optionTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".px-3.w-\\[3\\.625rem\\].flex.justify-center.leading-5.items-center.font-semibold.py-1.border.border-skin-blue.text-skin-select.rounded-md.bg-skin-grey.text-13.h-8")));
 
-            if (isSell != shouldBeSell) {
-                WebElement label = driver.findElement(By.xpath("//label[@for='b/s_underlying|transactiontype_toggle|S']"));
-                label.click();
-                logger.info("✅ Toggled B1 (Buy/Sell) to '{}'", expectedB1);
-                Thread.sleep(500);
-            } else {
-                logger.info("✅ B1 is already in expected state '{}'", expectedB1);
-            }
-        } catch (Exception e) {
-            logger.error("🚫 Unable to locate or toggle B1 checkbox", e);
+        WebElement orderTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|ordertype_toggle|MARKET}\"]")));
+       
+        String optionTypeText = optionTypeToggle.getText().trim();
+        String orderTypeText = orderTypeToggle.getText().trim();
+
+        logger.info("✅ Found Option Type Toggle | Text: {}", optionTypeText);
+        logger.info("✅ Found Order Type Toggle | Text: {}", orderTypeText);
+
+        if (!optionTypeText.equalsIgnoreCase("PUT")) {
+            optionTypeToggle.click();
+            logger.info("🔁 Changed Option Type to PUT");
         }
 
-        // --- B2: CALL/PUT Toggle ---
-        try {
-            WebElement b2Toggle = driver.findElement(By.id("b/s_underlying|optiontype_toggle|PE"));
-            String currentB2 = b2Toggle.getText().trim();
-
-            if (!currentB2.equalsIgnoreCase(expectedB2)) {
-                b2Toggle.click();
-                Thread.sleep(500);
-                logger.info("✅ Toggled B2 (CALL/PUT) to '{}'", expectedB2);
-            } else {
-                logger.info("✅ B2 is already in expected state '{}'", expectedB2);
-            }
-        } catch (Exception e) {
-            logger.error("🚫 Unable to locate or toggle B2 button", e);
+        if (!orderTypeText.equalsIgnoreCase("MKT.")) {
+            orderTypeToggle.click();
+            logger.info("🔁 Changed Order Type to MKT.");
         }
+        	   
+     // Step 1: Click the dynamic "BUY @" button
+        WebElement buyButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[starts-with(@id, 'b/s_underlying|place_order|BUY_')]")));
+            
+        String buyText = buyButton.getText();
+        logger.info("🟢 BUY Button Found: {}", buyText);
+        buyButton.click();
 
-        // --- B3: MKT./LIMIT Toggle ---
-        try {
-            String toggleId = String.format("b/s_underlying|ordertype_toggle|%s", expectedB3.toUpperCase().replace(".", ""));
-            WebElement b3Toggle = driver.findElement(By.id(toggleId));
-            String currentB3 = b3Toggle.getText().trim();
+        // Step 2: Wait for "CONFIRM ORDER" button to appear
+        WebElement confirmButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(), 'CONFIRM ORDER')]") ));
+       
 
-            if (!currentB3.equalsIgnoreCase(expectedB3)) {
-                b3Toggle.click();
-                Thread.sleep(500);
-                logger.info("✅ Toggled B3 (MKT./LIMIT) to '{}'", expectedB3);
-            } else {
-                logger.info("✅ B3 is already in expected state '{}'", expectedB3);
-            }
-        } catch (Exception e) {
-            logger.error("🚫 Unable to locate or toggle B3 button", e);
-        }
+        // Optional: Verify it's enabled (sometimes appears disabled first)
+        wait.until(ExpectedConditions.elementToBeClickable(confirmButton));
+
+        // Step 3: Click "CONFIRM ORDER"
+        logger.info("🟦 Confirm Order Button Found: {}", confirmButton.getText());
+        confirmButton.click();
+        
+        
     }
 }

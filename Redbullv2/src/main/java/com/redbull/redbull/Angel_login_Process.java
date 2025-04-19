@@ -83,9 +83,6 @@ public class Angel_login_Process {
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Option_Introduction_NotNow))).click();
             log.info("Login process completd");
             
-            
-            
-
         } catch (TimeoutException e) {
             log.error("Timeout while waiting for an element. Please check your network or page response time.", e);
         } catch (NoSuchElementException e) {
