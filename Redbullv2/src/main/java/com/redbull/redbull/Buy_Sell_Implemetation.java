@@ -57,6 +57,7 @@ public class Buy_Sell_Implemetation {
         // Step 3: Click "CONFIRM ORDER"
         logger.info("🟦 Confirm Order Button Found: {}", confirmButton.getText());
         confirmButton.click();
+        
     }
 
     public static void buyPE() throws InterruptedException {
