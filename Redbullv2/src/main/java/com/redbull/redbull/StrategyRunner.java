@@ -9,7 +9,7 @@ public class StrategyRunner {
 
     public static void runADX_FABStrategy() throws InterruptedException {
         Map<String, Double> values;
-        double adx = -1.0;
+        double adx = 0;
         double fa, fb;
 
         // Step 1: Wait until ADX > 20
@@ -61,7 +61,7 @@ public class StrategyRunner {
 
             } else {
                 logger.info("⚖️ No Clear Signal (FA == FB), waiting...");
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             }
         }
     }
@@ -95,6 +95,6 @@ public class StrategyRunner {
 
     // Helper method to check if value is invalid (null or -1.0)
     private static boolean isInvalid(Map<String, Double> map, String key) {
-        return map == null || !map.containsKey(key) || map.get(key) == -1.0;
+        return map == null || !map.containsKey(key) || map.get(key) == 0;
     }
 }

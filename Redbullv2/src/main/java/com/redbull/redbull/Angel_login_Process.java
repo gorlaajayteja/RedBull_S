@@ -82,6 +82,9 @@ public class Angel_login_Process {
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Gotit_Button))).click();
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Option_Introduction_NotNow))).click();
             log.info("Login process completd");
+            System.out.println("Please confirm the chart setupdone with below things\n"+"Time frame\n"+"Indicators\n"+ "Algo setup\n"+"COnfirm with any singel digit Number");
+            String Chart_confirmation = sc.next();
+            System.err.println("Thanks for the confirmarin with number: "+ Chart_confirmation);
             
         } catch (TimeoutException e) {
             log.error("Timeout while waiting for an element. Please check your network or page response time.", e);

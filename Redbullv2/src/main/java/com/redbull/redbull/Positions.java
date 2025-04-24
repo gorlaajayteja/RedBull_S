@@ -12,7 +12,7 @@ public class Positions {
 	
     public static void Exit_postions () throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
 //        driver.get("https://www.angelone.in/trade/watchlist/chart");
         driver.switchTo().defaultContent();
 

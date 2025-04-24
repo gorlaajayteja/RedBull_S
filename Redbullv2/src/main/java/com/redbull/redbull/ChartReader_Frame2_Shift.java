@@ -3,6 +3,7 @@ package com.redbull.redbull;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,11 +20,8 @@ public class ChartReader_Frame2_Shift {
     public static Map<String, Double> frameToframe() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
         driver.get("https://www.angelone.in/trade/watchlist/chart");
-        System.out.println("Please update the changes in Chart manually");
-        Thread.sleep(15000); // Wait for manual update
-        driver.get("https://www.angelone.in/trade/watchlist/chart");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30)); // Increased wait time
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50)); // Increased wait time
 
         // Switching to the first iframe where the chart is expected to be located
         WebElement iframe1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='scrip chart']")));
