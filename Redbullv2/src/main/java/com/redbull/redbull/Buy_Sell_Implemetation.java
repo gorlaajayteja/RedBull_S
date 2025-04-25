@@ -16,39 +16,38 @@ public class Buy_Sell_Implemetation {
 
     public static void buyCE() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-//        driver.get("https://www.angelone.in/trade/watchlist/chart");
+        driver.get("https://www.angelone.in/trade/watchlist/chart");
         driver.switchTo().defaultContent();
 
-        WebElement optionTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".px-3.w-\\[3\\.625rem\\].flex.justify-center.leading-5.items-center.font-semibold.py-1.border.border-skin-blue.text-skin-select.rounded-md.bg-skin-grey.text-13.h-8")));
-        WebElement orderTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|ordertype_toggle|MARKET}\"]")));
+        WebElement optionTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[id^='b/s_underlying|optiontype_toggle']")));
+        WebElement orderTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id, 'ordertype_toggle')]")));
         String optionTypeText = optionTypeToggle.getText().trim();
         String orderTypeText = orderTypeToggle.getText().trim();
+        logger.info("✅ Found Option Type Toggle | Text: {}", optionTypeText);
+        logger.info("✅ Found Order Type Toggle | Text: {}", orderTypeText);
+        if (!optionTypeText.equalsIgnoreCase("CALL")) {
+            optionTypeToggle.click();
+            logger.info("🔁 Changed Option Type to CALL");
+        }
+
+        if (!orderTypeText.equalsIgnoreCase("MKT.")) {
+            orderTypeToggle.click();
+            logger.info("🔁 Changed Order Type to MKT.");
+        }
         
         WebElement ATM_button = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strike_selection_toggle|true\"]")));
         ATM_button.click();
-//        WebElement listItem = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("b/s_underlying|strikePrice_select|ATM|scrip_79634_2")));
-        Thread.sleep(3);
-        // Extract values
-        String atmValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[1]/span[2]"))).getText();
-        String strikePrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[2]/span[1]"))).getText();
-        String contractType = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[2]/span[2]"))).getText();
-        String price = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[3]/div/div/span/span[1]"))).getText();
+//     // Extract values
+        String atmValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[1]/span[2]"))).getText();
+        String strikePrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[1]"))).getText();
+        String contractType = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[2]"))).getText();
+        String price = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[3]/div/div/span/span[1]"))).getText();
+
         logger.info(String.format("Strike: %s, ATM: %s, CE: %s, Price: %s", strikePrice, atmValue, contractType, price));
         ATM_button.click();
-//        logger.info("✅ Found Option Type Toggle | Text: {}", optionTypeText);
-//        logger.info("✅ Found Order Type Toggle | Text: {}", orderTypeText);
-
-//        if (!optionTypeText.equalsIgnoreCase("CALL")) {
-//            optionTypeToggle.click();
-////            logger.info("🔁 Changed Option Type to CALL");
-//        }
-//
-//        if (!orderTypeText.equalsIgnoreCase("MKT.")) {
-//            orderTypeToggle.click();
-//            logger.info("🔁 Changed Order Type to MKT.");
-//        }
+   
 //     // Step 1: Click the dynamic "BUY @" button
 //        WebElement buyButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[starts-with(@id, 'b/s_underlying|place_order|BUY_')]")));
 //            
@@ -76,36 +75,34 @@ public class Buy_Sell_Implemetation {
 //        driver.get("https://www.angelone.in/trade/watchlist/chart");
         driver.switchTo().defaultContent();
 
-        WebElement optionTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".px-3.w-\\[3\\.625rem\\].flex.justify-center.leading-5.items-center.font-semibold.py-1.border.border-skin-blue.text-skin-select.rounded-md.bg-skin-grey.text-13.h-8")));
-
-        WebElement orderTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|ordertype_toggle|MARKET}\"]")));
-       
+        WebElement optionTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[id^='b/s_underlying|optiontype_toggle']")));
+        WebElement orderTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id, 'ordertype_toggle')]")));      
         String optionTypeText = optionTypeToggle.getText().trim();
         String orderTypeText = orderTypeToggle.getText().trim();
 
         logger.info("✅ Found Option Type Toggle | Text: {}", optionTypeText);
         logger.info("✅ Found Order Type Toggle | Text: {}", orderTypeText);
+        if (!optionTypeText.equalsIgnoreCase("PUT")) {
+            optionTypeToggle.click();
+            logger.info("🔁 Changed Option Type to PUT");
+        }
+
+        if (!orderTypeText.equalsIgnoreCase("MKT.")) {
+            orderTypeToggle.click();
+            logger.info("🔁 Changed Order Type to MKT.");
+        }
         WebElement ATM_button = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strike_selection_toggle|true\"]")));
         ATM_button.click();
-//        WebElement listItem = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("b/s_underlying|strikePrice_select|ATM|scrip_79634_2")));
-        Thread.sleep(3);
-        // Extract values
-        String atmValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[1]/span[2]"))).getText();
-        String strikePrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[2]/span[1]"))).getText();
-        String contractType = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[2]/span[2]"))).getText();
-        String price = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|strikePrice_select|ATM|scrip_79634_2\"]/div/div[3]/div/div/span/span[1]"))).getText();
-        logger.info(String.format("Strike: %s, ATM: %s, PE: %s, Price: %s", strikePrice, atmValue, contractType, price));
+//     // Extract values
+        String atmValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[1]/span[2]"))).getText();
+        String strikePrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[1]"))).getText();
+        String contractType = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[2]"))).getText();
+        String price = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[3]/div/div/span/span[1]"))).getText();
+
+        logger.info(String.format("Strike: %s, ATM: %s, CE: %s, Price: %s", strikePrice, atmValue, contractType, price));
         ATM_button.click();
 
-//        if (!optionTypeText.equalsIgnoreCase("PUT")) {
-//            optionTypeToggle.click();
-//            logger.info("🔁 Changed Option Type to PUT");
-//        }
-//
-//        if (!orderTypeText.equalsIgnoreCase("MKT.")) {
-//            orderTypeToggle.click();
-//            logger.info("🔁 Changed Order Type to MKT.");
-//        }
+       
 //        	   
 //     // Step 1: Click the dynamic "BUY @" button
 //        WebElement buyButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[starts-with(@id, 'b/s_underlying|place_order|BUY_')]")));

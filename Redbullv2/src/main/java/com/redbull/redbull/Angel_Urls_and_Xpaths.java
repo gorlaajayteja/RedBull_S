@@ -15,6 +15,7 @@ public class Angel_Urls_and_Xpaths {
 	public static String Xpath_Pin_Entry = "//*[@id=\"login|input|mpin\"]";
 	public static String Xpath_Clickon_Proceed_PIN = "//*[@id=\"login|mpin|proceed\"]";
 	public static String Xpath_Gotit_Button = "//*[@id=\"modal\"]/div/div/div[2]/button";
+	//*[@id="modal"]/div/div/div[2]/button
 	public static String Xpath_NotNow = "//*[@id=\"modal\"]/div/div/div[2]/button";
 	public static String Xpath_Option_Introduction_NotNow = "//*[@id=\"modal\"]/div/div[2]/div[2]/button[1]";
 	

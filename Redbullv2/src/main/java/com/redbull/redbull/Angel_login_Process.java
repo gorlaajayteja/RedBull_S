@@ -23,7 +23,7 @@ public class Angel_login_Process {
         log.info("Instruction message: " + InstructionMassages.login_class_Activated);
 
         WebDriver driver = WebDriverSingleton.getInstance(); // Browser Instance
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 
         try {
             driver.get(Angel_Urls_and_Xpaths.Url_loginpage);
@@ -76,11 +76,11 @@ public class Angel_login_Process {
             
             // click on Gotit 
             
-            Thread.sleep(5000);
+//            Thread.sleep(5000);
             
-            driver.get(Angel_Urls_and_Xpaths.Url_CharPage);
-            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Gotit_Button))).click();
-            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Option_Introduction_NotNow))).click();
+//          driver.get(Angel_Urls_and_Xpaths.Url_CharPage);
+//            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Gotit_Button))).click();
+//            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Option_Introduction_NotNow))).click();
             log.info("Login process completd");
             System.out.println("Please confirm the chart setupdone with below things\n"+"Time frame\n"+"Indicators\n"+ "Algo setup\n"+"COnfirm with any singel digit Number");
             String Chart_confirmation = sc.next();

@@ -1,7 +1,9 @@
 package com.redbull.redbull;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,83 +20,109 @@ public class ChartReader_Frame2_Shift {
     private static final Logger log = LoggerFactory.getLogger(ChartReader_Frame2_Shift.class);
 
     public static Map<String, Double> frameToframe() throws InterruptedException {
+        log.info("Initializing WebDriver and navigating to the chart page.");
         WebDriver driver = WebDriverSingleton.getInstance();
         driver.get("https://www.angelone.in/trade/watchlist/chart");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50)); // Increased wait time
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 
-        // Switching to the first iframe where the chart is expected to be located
-        WebElement iframe1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='scrip chart']")));
-        driver.switchTo().frame(iframe1);
-        log.info("Script chart loaded");
+        try {
+            log.info("Switching to first iframe: scrip chart.");
+            WebElement iframe1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='scrip chart']")));
+            driver.switchTo().frame(iframe1);
 
-        // Switching to the second nested iframe where financial details are displayed
-        WebElement iframe2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='Financial Chart']")));
-        driver.switchTo().frame(iframe2);
-        log.info("Financial chart frame activated");
+            log.info("Switching to second nested iframe: financial chart.");
+            WebElement iframe2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='Financial Chart']")));
+            driver.switchTo().frame(iframe2);
 
-        // Collect indicator values
-        Map<String, Double> indicatorValues = collectIndicatorValues(driver);
-        driver.switchTo().defaultContent();
-        // Output the collected values without additional debug information
-//        indicatorValues.forEach((key, value) -> System.out.println(key + ": " + value));
+            log.info("Collecting indicator values.");
+            Map<String, Double> indicatorValues = collectIndicatorValues(driver);
 
-        return indicatorValues;
+            driver.switchTo().defaultContent();
+            return indicatorValues;
+        } catch (Exception e) {
+            log.error("Error processing frames: {}", e.getMessage(), e);
+            return new HashMap<>();
+        }
     }
 
     public static Map<String, Double> collectIndicatorValues(WebDriver driver) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Increased wait time
+        log.info("Starting indicator collection.");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         Map<String, Double> indicators = new HashMap<>();
+        List<String> indicatorKeys = Arrays.asList("ADX", "Plot", "Orb High", "Orb Low", "Histogram", "MACD", "Signal");
 
-        indicators.put("ADX", getValueByTitle(wait, "ADX"));
-        indicators.put("RSI", getValueByTitle(wait, "Plot"));
-        indicators.put("ORBH", getValueByTitle(wait, "Orb High"));
-        indicators.put("ORBL", getValueByTitle(wait, "Orb Low"));
-        indicators.put("MACD", getValueByTitle(wait, "Histogram"));
-        indicators.put("MACDG", getValueByTitle(wait, "MACD"));
-        indicators.put("MACDR", getValueByTitle(wait, "Signal"));
+        while (true) {
+            try {
+                for (String key : indicatorKeys) {
+                    indicators.put(key, getValueByTitle(wait, key));
+                    log.info("Successfully retrieved value for {}", key);
+                }
+                break;
+            } catch (Exception e) {
+                log.warn("Some values could not be found. Requesting user input. Error: {}", e.getMessage());
 
-        // FA and FB using XPath
-        indicators.put("FA", getValueByXPath(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div"));
-        indicators.put("FB", getValueByXPath(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[2]/div"));
+                Scanner scanner = new Scanner(System.in);
+                for (String key : indicatorKeys) {
+                    System.out.print("Enter the XPath for " + key + " (or press Enter to keep the same): ");
+                    String xpath = scanner.nextLine();
+                    if (!xpath.isEmpty()) {
+                        indicators.put(key, getValueByXpath(wait, xpath));
+                        log.info("User provided XPath for {}: {}", key, xpath);
+                    }
+                }
+                log.info("Restarting method with updated values.");
+            }
+        }
 
         return indicators;
     }
 
-    private static double getValueByTitle(WebDriverWait wait, String title) {
-        String selector = String.format("div[title='%s']", title);
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
+    private static Double getValueByXpath(WebDriverWait wait, String xpath) {
+        try {
+            log.info("Attempting to retrieve value for XPath: {}", xpath);
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+            String text = element.getText().trim();
+            log.info("Extracted text: {} for XPath: {}", text, xpath);
 
-        // Only print the extracted text for the value (not raw HTML or style)
-        if (element.isDisplayed()) {
-            String text = element.getText();
-            return parseValue(text);
-        } else {
-            return -1.0; // Or handle accordingly
+            return text.isEmpty() ? null : Double.parseDouble(text);
+        } catch (Exception e) {
+            log.error("Error retrieving value for XPath: {} - {}", xpath, e.getMessage(), e);
+            return null;
         }
     }
 
-    private static double getValueByXPath(WebDriverWait wait, String xpath) {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    private static double getValueByTitle(WebDriverWait wait, String title) {
+        try {
+            log.info("Attempting to retrieve value for title: {}", title);
+            String selector = String.format("div[title='%s']", title);
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
 
-        // Only print the extracted text for the value (not raw HTML or style)
-        if (element.isDisplayed()) {
-            String text = element.getText();
-            return parseValue(text);
-        } else {
-            return -1.0; // Or handle accordingly
+            if (element.isDisplayed()) {
+                String text = element.getText();
+                log.info("Extracted text for {}: {}", title, text);
+                return parseValue(text);
+            } else {
+                log.warn("Element for {} is not visible.", title);
+                return -1.0;
+            }
+        } catch (Exception e) {
+            log.error("Error retrieving value for title: {} - {}", title, e.getMessage(), e);
+            return -1.0;
         }
     }
 
     private static double parseValue(String text) {
         if (text.isEmpty()) {
-            return -1.0; // Return -1.0 or handle the case where value is missing
+            log.warn("Parsed value is empty, returning default -1.0");
+            return -1.0;
         }
 
         try {
-            return Double.parseDouble(text.replace("−", "-").trim()); // Handles special minus sign
+            return Double.parseDouble(text.replace("−", "-").trim());
         } catch (NumberFormatException e) {
-            return -1.0; // If the value cannot be parsed, return -1.0
+            log.error("Failed to parse numeric value: {} - {}", text, e.getMessage(), e);
+            return -1.0;
         }
     }
 }

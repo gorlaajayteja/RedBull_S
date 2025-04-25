@@ -30,7 +30,7 @@ public class StrategyRunner {
                 break;
             } else {
                 logger.info("Waiting for ADX to cross above 20...");
-                Thread.sleep(2000);
+                Thread.sleep(20000);
             }
         }
 
