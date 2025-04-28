@@ -44,7 +44,7 @@ public class RedBullv2 {
                     break;
 
                 case 2:
-                    Angel_login_Process.login();
+                    Angel_login_Process.Papertrade_login();
                     StrategyRunner.runADX_FABStrategy();
                     break;
 

@@ -88,10 +88,40 @@ public class Angel_login_Process {
             
         } catch (TimeoutException e) {
             log.error("Timeout while waiting for an element. Please check your network or page response time.", e);
+            
         } catch (NoSuchElementException e) {
             log.error("Element not found. Possibly due to network delay or incorrect XPath.", e);
+            log.info("Automation faild Please complete the login process maunally");
         } catch (Exception e) {
             log.error("Unexpected error occurred during login process.", e);
+            log.info("Automation faild Please complete the login process maunally");
         }
     }
+
+	public static void Papertrade_login( ) {
+		
+		System.out.println(InstructionMassages.login_class_Activated);
+        log.info("Instruction message: " + InstructionMassages.login_class_Activated);
+
+        WebDriver driver = WebDriverSingleton.getInstance(); // Browser Instance
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+        driver.get(Angel_Urls_and_Xpaths.Url_loginpage);
+        log.info("Opened login page URL");
+        Scanner sc = new Scanner(System.in);
+        
+        
+        System.out.println("Please complete the Login process manually..... and post any number for confirmation");
+        int Login_confirmation = sc.nextInt();
+        System.out.println("Thnaks for the confirmation..."+Login_confirmation);
+        
+        System.out.println("Apply the default chart setting and confirm");
+        int Chart_Confirmation = sc.nextInt();
+        System.out.println("Thnaks for the confirmation..."+Chart_Confirmation);
+        
+        System.out.println("Check the Time frame and confirm...........");
+        int Time_Confirmation = sc.nextInt();
+        System.out.println("Thnaks for the confirmation..."+Time_Confirmation);
+        
+		
+	}
 }

@@ -99,7 +99,7 @@ public class Buy_Sell_Implemetation {
         String contractType = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[2]"))).getText();
         String price = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[3]/div/div/span/span[1]"))).getText();
 
-        logger.info(String.format("Strike: %s, ATM: %s, CE: %s, Price: %s", strikePrice, atmValue, contractType, price));
+        logger.info(String.format("Strike: %s, ATM: %s, PE: %s, Price: %s", strikePrice, atmValue, contractType, price));
         ATM_button.click();
 
        
