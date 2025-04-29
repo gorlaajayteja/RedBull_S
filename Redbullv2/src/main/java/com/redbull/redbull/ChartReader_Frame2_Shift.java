@@ -45,11 +45,13 @@ import org.slf4j.LoggerFactory;
 
         indicators.put("ADX", getValueByTitle(wait, "ADX"));
         indicators.put("RSI", getValueByTitle(wait, "Plot"));
-        indicators.put("ORBH", getValueByTitle(wait, "Orb High"));
-        indicators.put("ORBL", getValueByTitle(wait, "Orb Low"));
+//        indicators.put("ORBH", getValueByTitle(wait, "Orb High"));
+//        indicators.put("ORBL", getValueByTitle(wait, "Orb Low"));
         indicators.put("MACD", getValueByTitle(wait, "Histogram"));
         indicators.put("MACDG", getValueByTitle(wait, "MACD"));
         indicators.put("MACDR", getValueByTitle(wait, "Signal"));
+        indicators.put("PDMI", getValueByTitle(wait, "PDMI"));
+        indicators.put("NDMI", getValueByTitle(wait, "NDMI"));
 
         // FA and FB using XPath
         indicators.put("FA", getValueByXPath(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div"));

@@ -21,15 +21,17 @@ public class Angel_Urls_and_Xpaths {
 	
 //	--------------Xpaths for Chartpage--------------------------------------------------------------------------
 
-	public static String Xpath_ORBHigh = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[2]/div[2]/div[2]/div[2]/div[2]/div/div[1]/div";
-	public static String Xpath_ORBlow = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[2]/div[2]/div[2]/div[2]/div[2]/div/div[2]/div";
-	public static String Xpath_RSI = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[3]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div";
-	public static String Xpath_FisherGreen = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div";
-	public static String Xpath_FisherRed = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div";
-	public static String Xpath_ADX = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div";
-	public static String Xpath_MACDmiddel = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div";
-	public static String Xpath_MACDGreen = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div";
-	public static String Xpath_MACDRed = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[1]/div/div[2]/div[2]/div[2]/div/div[3]/div";
+//	public static String Xpath_ORBHigh = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[2]/div[2]/div[2]/div[2]/div[2]/div/div[1]/div";
+//	public static String Xpath_ORBlow = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[2]/div[2]/div[2]/div[2]/div[2]/div/div[2]/div";
+	public static String Xpath_RSI = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[3]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div";
+	public static String Xpath_FisherGreen = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div";
+	public static String Xpath_FisherRed = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[2]/div";
+	public static String Xpath_PDMI = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div";
+	public static String Xpath_NDMI = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[2]/div";
+	public static String Xpath_ADX = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[9]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[4]/div";
+	public static String Xpath_MACDmiddel = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div";
+	public static String Xpath_MACDGreen = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[2]/div";
+	public static String Xpath_MACDRed = "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[7]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[3]/div";
 	public static String Xpathe_Chat_Setting1 = "/html/body/div[3]/div[1]/div/div/div[3]/div/div/div/div/div/div[20]/div/div/button[2]/div";
 	public static String Xpath_Load_Layout = "//*[@id=\"overlap-manager-root\"]/div/span/div[1]/div/div/div[3]";
 	public static String Xpath_Automation_chart = "//*[@id=\"overlap-manager-root\"]/div/div/div[1]/div/div[4]/div/div/div/div";

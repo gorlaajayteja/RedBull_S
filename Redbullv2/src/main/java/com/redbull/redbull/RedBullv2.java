@@ -45,7 +45,25 @@ public class RedBullv2 {
 
                 case 2:
                     Angel_login_Process.Papertrade_login();
-                    StrategyRunner.runADX_FABStrategy();
+
+                    // Introducing a switch for selecting the strategy
+                    System.out.println("Select the strategy to follow:");
+                    System.out.println("1. ADX_Fisher");
+                    System.out.println("2. DMI,MACD,FIsher"); // Add other strategies as needed
+
+                    Scanner scanner = new Scanner(System.in);
+                    int strategyChoice = scanner.nextInt();
+
+                    switch (strategyChoice) {
+                        case 1:
+                            StrategyRunner.runADX_FABStrategy();
+                            break;
+                        case 2:
+                            StrategyRunner.DMI_MACD_FI(); // Replace with actual method
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please select a valid strategy.");
+                    }
                     break;
 
                 case 3:

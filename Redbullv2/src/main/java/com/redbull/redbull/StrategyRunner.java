@@ -110,4 +110,78 @@ public class StrategyRunner {
     private static boolean isInvalid(Map<String, Double> map, String key) {
         return map == null || !map.containsKey(key) || map.get(key) == 0;
     }
+    public static void DMI_MACD_FI() throws InterruptedException {
+        Map<String, Double> values;
+        double ADX, MACD, MACDG, MACDR, PDMI, NDMI, FA, FB;
+        boolean isTradeInitiated = false;
+        String positionType = null; // Track whether the position is CE or PE
+
+        // Define the market close time
+        LocalTime marketCloseTime = LocalTime.of(15, 30); // Market closes at 3:30 PM
+
+        // Continuous execution until the market closes
+        while (LocalTime.now().isBefore(marketCloseTime)) {
+            logger.info("Starting a new strategy cycle...");
+
+            values = ChartReader_Frame2_Shift.frameToframe();
+
+            // Validate required indicators
+            if (isInvalid(values, "ADX") || isInvalid(values, "MACDG") ||
+                isInvalid(values, "MACD") || isInvalid(values, "PDMI") ||
+                isInvalid(values, "NDMI") || isInvalid(values, "FA") ||
+                isInvalid(values, "MACDR") || isInvalid(values, "FB")) 
+            {
+                logger.warn("❌ Failed to fetch one or more indicator values. Retrying in 10 seconds...");
+                Thread.sleep(10000);
+                continue;
+            }
+
+            // Fetch the required values
+            ADX = values.get("ADX");
+            MACD = values.get("MACD");
+            MACDG = values.get("MACDG");
+            MACDR = values.get("MACDR");
+            NDMI = values.get("NDMI");
+            PDMI = values.get("PDMI");
+            FA = values.get("FA");
+            FB = values.get("FB");
+
+            // Check if ADX indicates a trending market
+            if (ADX > 20) {
+                logger.info("✅ Trending Market Detected (ADX > 20)");
+
+                // Check for bullish condition (MACD line > MACD signal, DMI+ > DMI-, FA > FB)
+                if (MACDG > MACDR && PDMI > NDMI && FA > FB) {
+                    logger.info("📈 Bullish Signal Detected");
+                    if (!isTradeInitiated) {
+                        Buy_Sell_Implemetation.buyCE(); // Execute Buy Call
+                        positionType = "CE"; // Set position type to CE
+                        isTradeInitiated = true;
+                    }
+                }
+                // Check for bearish condition (MACD line < MACD signal, DMI+ < DMI-, FA < FB)
+                else if (MACDG < MACDR && PDMI < NDMI && FA < FB) {
+                    logger.info("📉 Bearish Signal Detected");
+                    if (!isTradeInitiated) {
+                        Buy_Sell_Implemetation.buyPE(); // Execute Buy Put
+                        positionType = "PE"; // Set position type to PE
+                        isTradeInitiated = true;
+                    }
+                } else {
+                    logger.info("⚖️ No Clear Signal Detected. Monitoring...");
+                }
+            } else {
+                logger.info("Waiting for ADX to rise above 20 to identify a trending market...");
+            }
+
+            // Monitor Exit Signal
+            if (isTradeInitiated && positionType != null) {
+                monitorExit(positionType); // Pass the position type to monitorExit
+            }
+
+            Thread.sleep(10000); // Pause before the next strategy cycle
+        }
+
+        logger.info("Market closed. Terminating DMI_MACD_FI strategy execution.");
+       }
 }
