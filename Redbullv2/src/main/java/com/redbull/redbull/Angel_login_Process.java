@@ -1,6 +1,7 @@
 package com.redbull.redbull;
 
 import java.time.Duration;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.openqa.selenium.By;
@@ -47,44 +48,45 @@ public class Angel_login_Process {
                 ExpectedConditions.visibilityOfElementLocated(By.xpath(Angel_Urls_and_Xpaths.Xpath_OTP_entry))
             );
             
-         // Ask user to enter OTP
-            Scanner sc = new Scanner(System.in);
-            System.out.println("PLEASE ENTER THE OTP:");
-            String OTP = sc.nextLine();
-            OTP_entry_box.sendKeys(OTP);
-            log.info("Entered OTP");
+         try (// Ask user to enter OTP
+			Scanner sc = new Scanner(System.in)) {
+				System.out.println("PLEASE ENTER THE OTP:");
+				String OTP = sc.nextLine();
+				OTP_entry_box.sendKeys(OTP);
+				log.info("Entered OTP");
 
 
-            // Click on Proceed for OTP
-            wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Clickon_Proceed_OTP))
-            ).click();
-            log.info("Clicked on Proceed (OTP)");
-           
-            // Click on PIN
-            WebElement PIn_entry_box = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(By.xpath(Angel_Urls_and_Xpaths.Xpath_Pin_Entry))
-                );
-            PIn_entry_box.sendKeys(Default_User_info.Angel_Pin);
-            log.info("Entered pin number");
-            
-            // Clink on proceed after enter the pin
-            
-            
-            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Clickon_Proceed_PIN))).click();
-            log.info("Clicked on Proceed (PIN)");
-            
-            // click on Gotit 
-            
+				// Click on Proceed for OTP
+				wait.until(
+				    ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Clickon_Proceed_OTP))
+				).click();
+				log.info("Clicked on Proceed (OTP)");
+         
+				// Click on PIN
+				WebElement PIn_entry_box = wait.until(
+				        ExpectedConditions.visibilityOfElementLocated(By.xpath(Angel_Urls_and_Xpaths.Xpath_Pin_Entry))
+				    );
+				PIn_entry_box.sendKeys(Default_User_info.Angel_Pin);
+				log.info("Entered pin number");
+				
+				// Clink on proceed after enter the pin
+				
+				
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Clickon_Proceed_PIN))).click();
+				log.info("Clicked on Proceed (PIN)");
+				
+				// click on Gotit 
+				
 //            Thread.sleep(5000);
-            
+				
 //          driver.get(Angel_Urls_and_Xpaths.Url_CharPage);
 //            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Gotit_Button))).click();
 //            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Angel_Urls_and_Xpaths.Xpath_Option_Introduction_NotNow))).click();
-            log.info("Login process completd");
-            System.out.println("Please confirm the chart setupdone with below things\n"+"Time frame\n"+"Indicators\n"+ "Algo setup\n"+"COnfirm with any singel digit Number");
-            String Chart_confirmation = sc.next();
-            System.err.println("Thanks for the confirmarin with number: "+ Chart_confirmation);
+				log.info("Login process completd");
+				System.out.println("Please confirm the chart setupdone with below things\n"+"Time frame\n"+"Indicators\n"+ "Algo setup\n"+"COnfirm with any singel digit Number");
+				String Chart_confirmation = sc.next();
+				System.err.println("Thanks for the confirmarin with number: "+ Chart_confirmation);
+			}
             
         } catch (TimeoutException e) {
             log.error("Timeout while waiting for an element. Please check your network or page response time.", e);
@@ -98,30 +100,42 @@ public class Angel_login_Process {
         }
     }
 
-	public static void Papertrade_login( ) {
-		
-		System.out.println(InstructionMassages.login_class_Activated);
+    public static void Papertrade_login() {
+        System.out.println(InstructionMassages.login_class_Activated);
         log.info("Instruction message: " + InstructionMassages.login_class_Activated);
 
         WebDriver driver = WebDriverSingleton.getInstance(); // Browser Instance
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         driver.get(Angel_Urls_and_Xpaths.Url_loginpage);
         log.info("Opened login page URL");
-        Scanner sc = new Scanner(System.in);
-        
-        
-        System.out.println("Please complete the Login process manually..... and post any number for confirmation");
-        int Login_confirmation = sc.nextInt();
-        System.out.println("Thnaks for the confirmation..."+Login_confirmation);
-        
-        System.out.println("Apply the default chart setting and confirm");
-        int Chart_Confirmation = sc.nextInt();
-        System.out.println("Thnaks for the confirmation..."+Chart_Confirmation);
-        
-        System.out.println("Check the Time frame and confirm...........");
-        int Time_Confirmation = sc.nextInt();
-        System.out.println("Thnaks for the confirmation..."+Time_Confirmation);
-        
-		
-	}
+
+        try (Scanner sc = new Scanner(System.in)) {
+            System.err.println("Please complete the Login process manually..... and post any number for confirmation");
+            
+            int Login_confirmation = getUserConfirmation(sc, "Login");
+            log.info("Login confirmation received: " + Login_confirmation);
+            
+            int Chart_Confirmation = getUserConfirmation(sc, "Default chart setting");
+            log.info("Chart setting confirmation received: " + Chart_Confirmation);
+            
+            int Time_Confirmation = getUserConfirmation(sc, "Time frame");
+            log.info("Time frame confirmation received: " + Time_Confirmation);
+            
+            int ATM_Confirmation = getUserConfirmation(sc, "ATM Button");
+            log.info("ATM button confirmation received: " + ATM_Confirmation);
+        }
+    }
+
+    private static int getUserConfirmation(Scanner sc, String context) {
+        int confirmation = -1;
+        while (confirmation < 0) {
+            try {
+                System.err.println("Please confirm the " + context + ":");
+                confirmation = sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.err.println("⚠️ Invalid input. Please enter a number.");
+                sc.next(); // Clear invalid input
+            }
+        }
+        return confirmation;
+    }
 }

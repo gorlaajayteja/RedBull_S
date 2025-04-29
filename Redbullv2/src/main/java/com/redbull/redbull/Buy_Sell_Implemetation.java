@@ -72,7 +72,7 @@ public class Buy_Sell_Implemetation {
         WebDriver driver = WebDriverSingleton.getInstance();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-//        driver.get("https://www.angelone.in/trade/watchlist/chart");
+        driver.get("https://www.angelone.in/trade/watchlist/chart");
         driver.switchTo().defaultContent();
 
         WebElement optionTypeToggle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[id^='b/s_underlying|optiontype_toggle']")));

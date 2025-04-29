@@ -43,19 +43,21 @@ import org.slf4j.LoggerFactory;
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Increased wait time
         Map<String, Double> indicators = new HashMap<>();
 
-        indicators.put("ADX", getValueByTitle(wait, "ADX"));
-        indicators.put("RSI", getValueByTitle(wait, "Plot"));
+//        indicators.put("ADX", getValueByTitle(wait, "ADX"));
+//        indicators.put("RSI", getValueByTitle(wait, "Plot"));
 //        indicators.put("ORBH", getValueByTitle(wait, "Orb High"));
 //        indicators.put("ORBL", getValueByTitle(wait, "Orb Low"));
         indicators.put("MACD", getValueByTitle(wait, "Histogram"));
         indicators.put("MACDG", getValueByTitle(wait, "MACD"));
         indicators.put("MACDR", getValueByTitle(wait, "Signal"));
-        indicators.put("PDMI", getValueByTitle(wait, "PDMI"));
-        indicators.put("NDMI", getValueByTitle(wait, "NDMI"));
+        
+        indicators.put("PDMI", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_PDMI));
+        indicators.put("NDMI", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_NDMI));
+        indicators.put("ADX", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_ADX));
 
         // FA and FB using XPath
-        indicators.put("FA", getValueByXPath(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[1]/div"));
-        indicators.put("FB", getValueByXPath(wait, "/html/body/div[3]/div[3]/div[2]/div[1]/div[2]/div[2]/div[5]/div[2]/div/div[2]/div/div[2]/div[2]/div[2]/div/div[2]/div"));
+        indicators.put("FA", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_FisherGreen));
+        indicators.put("FB", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_FisherRed));
 
         return indicators;
     }

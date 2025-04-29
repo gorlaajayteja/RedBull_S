@@ -112,7 +112,7 @@ public class StrategyRunner {
     }
     public static void DMI_MACD_FI() throws InterruptedException {
         Map<String, Double> values;
-        double ADX, MACD, MACDG, MACDR, PDMI, NDMI, FA, FB;
+        double ADX, MACDG, MACDR, PDMI, NDMI, FA, FB;
         boolean isTradeInitiated = false;
         String positionType = null; // Track whether the position is CE or PE
 
@@ -138,7 +138,6 @@ public class StrategyRunner {
 
             // Fetch the required values
             ADX = values.get("ADX");
-            MACD = values.get("MACD");
             MACDG = values.get("MACDG");
             MACDR = values.get("MACDR");
             NDMI = values.get("NDMI");
@@ -153,6 +152,8 @@ public class StrategyRunner {
                 // Check for bullish condition (MACD line > MACD signal, DMI+ > DMI-, FA > FB)
                 if (MACDG > MACDR && PDMI > NDMI && FA > FB) {
                     logger.info("📈 Bullish Signal Detected");
+                    logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
+
                     if (!isTradeInitiated) {
                         Buy_Sell_Implemetation.buyCE(); // Execute Buy Call
                         positionType = "CE"; // Set position type to CE
@@ -162,6 +163,9 @@ public class StrategyRunner {
                 // Check for bearish condition (MACD line < MACD signal, DMI+ < DMI-, FA < FB)
                 else if (MACDG < MACDR && PDMI < NDMI && FA < FB) {
                     logger.info("📉 Bearish Signal Detected");
+                    logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
+
+
                     if (!isTradeInitiated) {
                         Buy_Sell_Implemetation.buyPE(); // Execute Buy Put
                         positionType = "PE"; // Set position type to PE
