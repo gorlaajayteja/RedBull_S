@@ -114,6 +114,7 @@ public class Angel_login_Process {
             int Login_confirmation = getUserConfirmation(sc, "Login");
             log.info("Login confirmation received: " + Login_confirmation);
             
+            
             int Chart_Confirmation = getUserConfirmation(sc, "Default chart setting");
             log.info("Chart setting confirmation received: " + Chart_Confirmation);
             

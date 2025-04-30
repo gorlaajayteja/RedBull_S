@@ -14,6 +14,7 @@ public class StrategyRunner {
     public static void runADX_FABStrategy() throws InterruptedException {
         Map<String, Double> values;
         double adx, fa, fb;
+        
 
         // Define the market close time
         LocalTime marketCloseTime = LocalTime.of(15, 30); // Market closes at 3:30 PM
@@ -117,7 +118,7 @@ public class StrategyRunner {
         String positionType = null; // Track whether the position is CE or PE
 
         // Define the market close time
-        LocalTime marketCloseTime = LocalTime.of(15, 30); // Market closes at 3:30 PM
+        LocalTime marketCloseTime = LocalTime.of(23, 30); // Market closes at 3:30 PM
 
         // Continuous execution until the market closes
         while (LocalTime.now().isBefore(marketCloseTime)) {

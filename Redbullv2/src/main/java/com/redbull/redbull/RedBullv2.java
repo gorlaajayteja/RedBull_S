@@ -1,6 +1,7 @@
 package com.redbull.redbull;
 
 import java.time.Duration;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import org.openqa.selenium.By;
@@ -21,6 +22,8 @@ public class RedBullv2 {
         System.out.println(InstructionMassages.Redbull_Activated);
 
         Scanner sc = new Scanner(System.in);
+        System.out.println("1. ADX_Fisher\n2. DMI, MACD, Fisher");
+        int chooseStrgy = sc.nextInt();
         int chooseTrade;
 
         // Validate user input
@@ -46,26 +49,17 @@ public class RedBullv2 {
                 case 2:
                     Angel_login_Process.Papertrade_login();
 
-                    // Introducing a switch for selecting the strategy
-                    System.out.println("Select the strategy to follow:");
-                    System.out.println("1. ADX_Fisher");
-                    System.out.println("2. DMI,MACD,FIsher"); // Add other strategies as needed
-
-                    Scanner scanner = new Scanner(System.in);
-                    int strategyChoice = scanner.nextInt();
-
-                    switch (strategyChoice) {
-                        case 1:
-                            StrategyRunner.runADX_FABStrategy();
-                            break;
-                        case 2:
-                            StrategyRunner.DMI_MACD_FI(); // Replace with actual method
-                            break;
-                        default:
-                            System.out.println("Invalid choice. Please select a valid strategy.");
+                    if (chooseStrgy == 1) {
+                        StrategyRunner.runADX_FABStrategy();
+                    } else if (chooseStrgy == 2) {
+                        StrategyRunner.DMI_MACD_FI();
+                    } else {
+                        System.out.println("Invalid choice. Please select a valid strategy.");
                     }
-                    break;
-
+                    
+                    
+                    
+                    
                 case 3:
                     Angel_login_Process.login();
                     WebDriver driver = WebDriverSingleton.getInstance();
@@ -77,7 +71,10 @@ public class RedBullv2 {
                     // Wait for ATM button to be clickable
                     WebElement ATM_button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='b/s_underlying|strike_selection_toggle|true']")));
                     ATM_button.click();
-
+                   
+                    
+                    
+                    
                     // Extract values with explicit waits
                     String atmValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[1]/span[2]"))).getText();
                     String strikePrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[1]"))).getText();
