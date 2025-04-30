@@ -3,99 +3,102 @@ package com.redbull.redbull;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.concurrent.TimeoutException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-	public class ChartReader_Frame2_Shift {
-    private static final Logger log = LoggerFactory.getLogger(ChartReader_Frame2_Shift.class);
-
+public class ChartReader_Frame2_Shift {
+    
+    // Global scanner instance (do not close it while using it in the app)
+    private static final Scanner scanner = new Scanner(System.in);
+    
     public static Map<String, Double> frameToframe() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
         driver.get("https://www.angelone.in/trade/watchlist/chart");
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50)); // Increased wait time
+        
+        // Use Java 8's java.time.Duration (make sure you are using the correct Selenium dependency)
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 
         // Switching to the first iframe where the chart is expected to be located
-        WebElement iframe1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='scrip chart']")));
+        WebElement iframe1 = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='scrip chart']")));
         driver.switchTo().frame(iframe1);
-//        log.info("Script chart loaded");
 
         // Switching to the second nested iframe where financial details are displayed
-        WebElement iframe2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='Financial Chart']")));
+        WebElement iframe2 = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='Financial Chart']")));
         driver.switchTo().frame(iframe2);
-//        log.info("Financial chart frame activated");
 
-        // Collect indicator values
+        // Collect indicator values 
         Map<String, Double> indicatorValues = collectIndicatorValues(driver);
         driver.switchTo().defaultContent();
-//         Output the collected values without additional debug information
-//        indicatorValues.forEach((key, value) -> System.out.println(key + ": " + value));
-
         return indicatorValues;
     }
-
+    
     public static Map<String, Double> collectIndicatorValues(WebDriver driver) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Increased wait time
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         Map<String, Double> indicators = new HashMap<>();
-
-//        indicators.put("ADX", getValueByTitle(wait, "ADX"));
-//        indicators.put("RSI", getValueByTitle(wait, "Plot"));
-//        indicators.put("ORBH", getValueByTitle(wait, "Orb High"));
-//        indicators.put("ORBL", getValueByTitle(wait, "Orb Low"));
-        indicators.put("MACD", getValueByTitle(wait, "Histogram"));
-        indicators.put("MACDG", getValueByTitle(wait, "MACD"));
-        indicators.put("MACDR", getValueByTitle(wait, "Signal"));
+        indicators.put("MACD", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_MACDmiddel));
+        indicators.put("MACDG", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_MACDGreen));
+        indicators.put("MACDR", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_MACDRed));
         
         indicators.put("PDMI", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_PDMI));
         indicators.put("NDMI", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_NDMI));
         indicators.put("ADX", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_ADX));
-
+        
         // FA and FB using XPath
         indicators.put("FA", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_FisherGreen));
         indicators.put("FB", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_FisherRed));
-
+        
         return indicators;
     }
-
+    
     private static double getValueByTitle(WebDriverWait wait, String title) {
         String selector = String.format("div[title='%s']", title);
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
-
-        // Only print the extracted text for the value (not raw HTML or style)
+        
         if (element.isDisplayed()) {
             String text = element.getText();
             return parseValue(text);
         } else {
-            return -0; // Or handle accordingly
+            return -0;
         }
     }
-
+    
     private static double getValueByXPath(WebDriverWait wait, String xpath) {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+        WebElement element = null;
+        try (Scanner scanner = new Scanner(System.in)) {
+			while (true) {
+			    try {
+			        element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 
-        // Only print the extracted text for the value (not raw HTML or style)
-        if (element.isDisplayed()) {
-            String text = element.getText();
-            return parseValue(text);
-        } else {
-            return -0; // Or handle accordingly
-        }
+			        if (element.isDisplayed()) {
+			            String text = element.getText();
+			            return parseValue(text);
+			        }
+			    } catch (NoSuchElementException e) {
+			        System.out.println("❌ XPath failed: " + xpath);
+			        System.out.print("Enter a new XPath for this element: ");
+			        xpath = scanner.nextLine(); // Get new XPath from user
+			    }
+			}
+		}
     }
-
+    
     private static double parseValue(String text) {
         if (text.isEmpty()) {
-            return -0; // Return -1.0 or handle the case where value is missing
+            return -0; // Or handle accordingly
         }
-
         try {
-            return Double.parseDouble(text.replace("−", "-").trim()); // Handles special minus sign
+            return Double.parseDouble(text.replace("−", "-").trim());
         } catch (NumberFormatException e) {
-            return -0; // If the value cannot be parsed, return -1.0
+            return -0;
         }
     }
 }

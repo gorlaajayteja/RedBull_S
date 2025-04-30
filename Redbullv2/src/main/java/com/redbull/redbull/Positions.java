@@ -27,13 +27,13 @@ public class Positions {
 
         logger.info(String.format("Strike: %s, ATM: %s, CE: %s, Price: %s", strikePrice, atmValue, contractType, price));
 
-        WebElement postions_Tab = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|position/Orders_List|scrip_99926000_1\"]")));
-        postions_Tab.click();
-        
-        WebElement Postion_Window = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|positions_tab|scrip_99926000_1\"]")));
-        Postion_Window.click();
-        
-        WebElement Exit_postions = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|position_exit|scrip_79197_2\"]")));
-        Exit_postions.click();
+//        WebElement postions_Tab = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|position/Orders_List|scrip_99926000_1\"]")));
+//        postions_Tab.click();
+//        
+//        WebElement Postion_Window = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|positions_tab|scrip_99926000_1\"]")));
+//        Postion_Window.click();
+//        
+//        WebElement Exit_postions = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"b/s_underlying|position_exit|scrip_79197_2\"]")));
+//        Exit_postions.click();
     }
 }

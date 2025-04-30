@@ -1,10 +1,21 @@
 package com.redbull.redbull;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.concurrent.TimeoutException;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
+
 
 public class StrategyRunner {
 
@@ -40,7 +51,7 @@ public class StrategyRunner {
                     logger.info("ADX is now above 20 ✅");
                     break;
                 } else {
-                    logger.info("Waiting for ADX to cross above 20...");
+                    logger.info("Waiting for ADX to cross above 20, Current ADX is: "+adx);
                     Thread.sleep(20000);
                 }
             }
@@ -111,82 +122,141 @@ public class StrategyRunner {
     private static boolean isInvalid(Map<String, Double> map, String key) {
         return map == null || !map.containsKey(key) || map.get(key) == 0;
     }
-    public static void DMI_MACD_FI() throws InterruptedException {
+    public static void DMI_MACD_FI() throws InterruptedException, TimeoutException {
         Map<String, Double> values;
-        double ADX, MACDG, MACDR, PDMI, NDMI, FA, FB;
+        
         boolean isTradeInitiated = false;
-        String positionType = null; // Track whether the position is CE or PE
+        String positionType = null;
 
-        // Define the market close time
-        LocalTime marketCloseTime = LocalTime.of(23, 30); // Market closes at 3:30 PM
+        // Define market close time
+        LocalTime marketCloseTime = LocalTime.of(23, 30); // Market closes at 11:30 PM
 
-        // Continuous execution until the market closes
+        WebDriver driver = WebDriverSingleton.getInstance();
+        
+        // **Validate All XPaths Before Strategy Execution**
+//        validateXPaths(driver);
+
         while (LocalTime.now().isBefore(marketCloseTime)) {
             logger.info("Starting a new strategy cycle...");
-
             values = ChartReader_Frame2_Shift.frameToframe();
 
-            // Validate required indicators
-            if (isInvalid(values, "ADX") || isInvalid(values, "MACDG") ||
-                isInvalid(values, "MACD") || isInvalid(values, "PDMI") ||
-                isInvalid(values, "NDMI") || isInvalid(values, "FA") ||
-                isInvalid(values, "MACDR") || isInvalid(values, "FB")) 
-            {
-                logger.warn("❌ Failed to fetch one or more indicator values. Retrying in 10 seconds...");
+            if (!areIndicatorsValid(values)) {
+                logger.warn("❌ One or more indicators are missing. Retrying in 10 seconds...");
                 Thread.sleep(10000);
                 continue;
             }
 
-            // Fetch the required values
-            ADX = values.get("ADX");
-            MACDG = values.get("MACDG");
-            MACDR = values.get("MACDR");
-            NDMI = values.get("NDMI");
-            PDMI = values.get("PDMI");
-            FA = values.get("FA");
-            FB = values.get("FB");
-
-            // Check if ADX indicates a trending market
-            if (ADX > 20) {
-                logger.info("✅ Trending Market Detected (ADX > 20)");
-
-                // Check for bullish condition (MACD line > MACD signal, DMI+ > DMI-, FA > FB)
-                if (MACDG > MACDR && PDMI > NDMI && FA > FB) {
-                    logger.info("📈 Bullish Signal Detected");
-                    logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
-
-                    if (!isTradeInitiated) {
-                        Buy_Sell_Implemetation.buyCE(); // Execute Buy Call
-                        positionType = "CE"; // Set position type to CE
-                        isTradeInitiated = true;
-                    }
-                }
-                // Check for bearish condition (MACD line < MACD signal, DMI+ < DMI-, FA < FB)
-                else if (MACDG < MACDR && PDMI < NDMI && FA < FB) {
-                    logger.info("📉 Bearish Signal Detected");
-                    logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
-
-
-                    if (!isTradeInitiated) {
-                        Buy_Sell_Implemetation.buyPE(); // Execute Buy Put
-                        positionType = "PE"; // Set position type to PE
-                        isTradeInitiated = true;
-                    }
-                } else {
-                    logger.info("⚖️ No Clear Signal Detected. Monitoring...");
-                }
-            } else {
-                logger.info("Waiting for ADX to rise above 20 to identify a trending market...");
-            }
-
-            // Monitor Exit Signal
-            if (isTradeInitiated && positionType != null) {
-                monitorExit(positionType); // Pass the position type to monitorExit
-            }
-
-            Thread.sleep(10000); // Pause before the next strategy cycle
+            executeTradeStrategy(values, isTradeInitiated, positionType);
         }
 
-        logger.info("Market closed. Terminating DMI_MACD_FI strategy execution.");
-       }
+        logger.info("Market closed. Terminating execution.");
+    }
+
+    // **XPath Validation Before Execution**
+    public static void validateXPaths(WebDriver driver) throws TimeoutException {
+    	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+// 10 seconds timeout
+
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, String> indicatorsToCheck = Map.of(
+            "MACD", Angel_Urls_and_Xpaths.Xpath_MACDmiddel,
+            "MACDG", Angel_Urls_and_Xpaths.Xpath_MACDGreen,
+            "MACDR", Angel_Urls_and_Xpaths.Xpath_MACDRed,
+            "PDMI", Angel_Urls_and_Xpaths.Xpath_PDMI,
+            "NDMI", Angel_Urls_and_Xpaths.Xpath_NDMI,
+            "ADX", Angel_Urls_and_Xpaths.Xpath_ADX,
+            "FA", Angel_Urls_and_Xpaths.Xpath_FisherGreen,
+            "FB", Angel_Urls_and_Xpaths.Xpath_FisherRed
+        );
+
+        for (Map.Entry<String, String> entry : indicatorsToCheck.entrySet()) {
+            String key = entry.getKey();
+            String xpath = entry.getValue();
+
+            System.out.print("Do you want to validate " + key + "? (yes/no): ");
+            String userInput = scanner.nextLine();
+            if (!userInput.equals("yes")) continue;
+
+            boolean isValid = checkXPath(wait, xpath);
+            while (!isValid) {
+                System.out.println("XPath failed for: " + key);
+                System.out.print("Enter a new XPath for " + key + ": ");
+                String newXPath = scanner.nextLine();
+                isValid = checkXPath(wait, newXPath);
+
+                if (isValid) {
+                    indicatorsToCheck.put(key, newXPath);
+                    System.out.println("XPath for " + key + " updated successfully!");
+                }
+            }
+        }
+        scanner.close();
+    }
+
+    // **Indicator Health Check**
+    private static boolean areIndicatorsValid(Map<String, Double> values) {
+        return values != null && values.entrySet().stream()
+            .allMatch(entry -> entry.getValue() != null && entry.getValue() != -0);
+    }
+
+    // **Trade Execution Logic**
+    private static void executeTradeStrategy(Map<String, Double> values, boolean isTradeInitiated, String positionType) throws InterruptedException {
+        double ADX = values.get("ADX");
+        double MACDG = values.get("MACDG");
+        double MACDR = values.get("MACDR");
+        double PDMI = values.get("PDMI");
+        double NDMI = values.get("NDMI");
+        double FA = values.get("FA");
+        double FB = values.get("FB");
+
+        // **Trending Market Check (ADX > 20)**
+        if (ADX > 20) {
+            logger.info("✅ Trending Market Detected (ADX > 20)");
+
+            // **Bullish Condition Check**
+            if (MACDG > MACDR && PDMI > NDMI && FA > FB) {
+                logger.info("📈 Bullish Signal Detected");
+                logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
+
+                if (!isTradeInitiated) {
+                    Buy_Sell_Implemetation.buyCE(); // Execute Buy Call
+                    positionType = "CE";
+                    isTradeInitiated = true;
+                }
+            }
+            // **Bearish Condition Check**
+            else if (MACDG < MACDR && PDMI < NDMI && FA < FB) {
+                logger.info("📉 Bearish Signal Detected");
+                logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
+
+                if (!isTradeInitiated) {
+                    Buy_Sell_Implemetation.buyPE(); // Execute Buy Put
+                    positionType = "PE";
+                    isTradeInitiated = true;
+                }
+            } else {
+                logger.info("⚖️ No Clear Signal Detected. Monitoring...");
+                Thread.sleep(30000);
+            }
+        } else {
+            logger.info("Waiting for ADX to rise above 20 to identify a trending market...");
+        }
+
+        // **Trade Exit Monitoring**
+        if (isTradeInitiated && positionType != null) {
+            monitorExit(positionType); // Pass position type to monitorExit()
+        }
+    }
+
+    // **XPath Check**
+    private static boolean checkXPath(WebDriverWait wait, String xpath) throws TimeoutException {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath))).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+   
 }

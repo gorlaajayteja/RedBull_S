@@ -48,16 +48,15 @@ public class RedBullv2 {
 
                 case 2:
                     Angel_login_Process.Papertrade_login();
-
+//                    ChartReader_Frame2_Shift.validateXPaths();
                     if (chooseStrgy == 1) {
                         StrategyRunner.runADX_FABStrategy();
                     } else if (chooseStrgy == 2) {
+                    	
                         StrategyRunner.DMI_MACD_FI();
                     } else {
                         System.out.println("Invalid choice. Please select a valid strategy.");
                     }
-                    
-                    
                     
                     
                 case 3:
