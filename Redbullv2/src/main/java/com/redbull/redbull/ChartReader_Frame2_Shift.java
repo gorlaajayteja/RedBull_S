@@ -42,19 +42,19 @@ public class ChartReader_Frame2_Shift {
     }
     
     public static Map<String, Double> collectIndicatorValues(WebDriver driver) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+       
         Map<String, Double> indicators = new HashMap<>();
-        indicators.put("MACD", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_MACDmiddel));
-        indicators.put("MACDG", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_MACDGreen));
-        indicators.put("MACDR", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_MACDRed));
+//        indicators.put("MACD", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDmiddel));
+        indicators.put("MACDG", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDGreen));
+        indicators.put("MACDR", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDRed));
         
-        indicators.put("PDMI", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_PDMI));
-        indicators.put("NDMI", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_NDMI));
-        indicators.put("ADX", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_ADX));
+        indicators.put("PDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_PDMI));
+        indicators.put("NDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_NDMI));
+        indicators.put("ADX", getValueByXPath( Angel_Urls_and_Xpaths.Xpath_ADX));
         
         // FA and FB using XPath
-        indicators.put("FA", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_FisherGreen));
-        indicators.put("FB", getValueByXPath(wait, Angel_Urls_and_Xpaths.Xpath_FisherRed));
+        indicators.put("FA", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_FisherGreen));
+        indicators.put("FB", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_FisherRed));
         
         return indicators;
     }
@@ -71,7 +71,10 @@ public class ChartReader_Frame2_Shift {
         }
     }
     
-    private static double getValueByXPath(WebDriverWait wait, String xpath) {
+    public static double getValueByXPath(String xpath) {
+    	WebDriver driver = WebDriverSingleton.getInstance();
+    	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+
         WebElement element = null;
         try (Scanner scanner = new Scanner(System.in)) {
 			while (true) {

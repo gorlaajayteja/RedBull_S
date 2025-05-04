@@ -1,42 +1,52 @@
 package com.redbull.redbull;
 
-import java.time.Duration;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class RedBullv2 {
+    private static final Scanner scanner = new Scanner(System.in); // Single shared scanner
+
+    public static String userInput(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine().trim();
+    }
+
+    public static int userIntInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            try {
+                return Integer.parseInt(input.trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+    }
+
+
+    public static void closeScanner() {
+        scanner.close();
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(RedBullv2.class, args);
         System.out.println(InstructionMassages.greeting);
         System.out.println(InstructionMassages.Redbull_Activated);
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("1. ADX_Fisher\n2. DMI, MACD, Fisher");
-        int chooseStrgy = sc.nextInt();
+        int chooseStrgy = userIntInput("Choose your Strategy:\n1. ADX_Fisher\n2. DMI, MACD, Fisher\nYour Choice: ");
         int chooseTrade;
 
-        // Validate user input
+        // Validating trading type
         while (true) {
-            System.out.println("Please Choose the Trading:\n1. Real Trade\n2. Paper Trade\n3. Personal or Testing");
-            if (sc.hasNextInt()) {
-                chooseTrade = sc.nextInt();
-                if (chooseTrade >= 1 && chooseTrade <= 3) {
-                    break;
-                }
+            chooseTrade = userIntInput("Choose Trading Mode:\n1. Real Trade\n2. Paper Trade\n3. Personal or Testing\nYour Choice: ");
+            if (chooseTrade >= 1 && chooseTrade <= 3) {
+                break;
+            } else {
+                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
             }
-            System.out.println("Invalid choice. Please enter a number between 1 and 3.");
-            sc.nextLine(); // Clear invalid input
         }
 
         try {
@@ -48,42 +58,19 @@ public class RedBullv2 {
 
                 case 2:
                     Angel_login_Process.Papertrade_login();
-//                    ChartReader_Frame2_Shift.validateXPaths();
                     if (chooseStrgy == 1) {
                         StrategyRunner.runADX_FABStrategy();
                     } else if (chooseStrgy == 2) {
-                    	
                         StrategyRunner.DMI_MACD_FI();
                     } else {
-                        System.out.println("Invalid choice. Please select a valid strategy.");
+                        System.out.println("Invalid strategy choice.");
                     }
-                    
-                    
-                case 3:
-                    Angel_login_Process.login();
-                    WebDriver driver = WebDriverSingleton.getInstance();
-                    final Logger logger = LoggerFactory.getLogger(Buy_Sell_Implemetation.class);
-                    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-                    driver.get("https://www.angelone.in/trade/watchlist/chart");
-
-                    // Wait for ATM button to be clickable
-                    WebElement ATM_button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='b/s_underlying|strike_selection_toggle|true']")));
-                    ATM_button.click();
-                   
-                    
-                    
-                    
-                    // Extract values with explicit waits
-                    String atmValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[1]/span[2]"))).getText();
-                    String strikePrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[1]"))).getText();
-                    String contractType = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[2]/span[2]"))).getText();
-                    String price = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@id,'b/s_underlying|strikePrice_select|ATM|scrip_')]/div/div[3]/div/div/span/span[1]"))).getText();
-
-                    logger.info(String.format("Strike: %s, ATM: %s, CE: %s, Price: %s", strikePrice, atmValue, contractType, price));
-                    ATM_button.click();
-                    
                     break;
+
+                case 3:
+                	Xpath_Validator.validateAllIndicators();
+
+
 
                 default:
                     System.out.println("Unexpected error in trade selection.");
@@ -94,8 +81,9 @@ public class RedBullv2 {
         } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            sc.close(); // Close scanner to prevent resource leaks
-        }
+        } 
+//        finally {
+//            closeScanner(); // Safely close scanner once done
+//        }
     }
 }
