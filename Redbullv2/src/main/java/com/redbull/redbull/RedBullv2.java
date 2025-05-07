@@ -36,36 +36,41 @@ public class RedBullv2 {
         System.out.println(InstructionMassages.greeting);
         System.out.println(InstructionMassages.Redbull_Activated);
 
-        int chooseStrgy = userIntInput("Choose your Strategy:\n1. ADX_Fisher\n2. DMI, MACD, Fisher\nYour Choice: ");
-        int chooseTrade;
+//        int chooseStrgy = userIntInput("Choose your Strategy:\n1. ADX_Fisher\n2. DMI, MACD, Fisher\nYour Choice: ");
+//        int chooseTrade;
 
         // Validating trading type
-        while (true) {
-            chooseTrade = userIntInput("Choose Trading Mode:\n1. Real Trade\n2. Paper Trade\n3. Personal or Testing\nYour Choice: ");
-            if (chooseTrade >= 1 && chooseTrade <= 3) {
-                break;
-            } else {
-                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
-            }
-        }
+//        while (true) {
+//            chooseTrade = userIntInput("Choose Trading Mode:\n1. Real Trade\n2. Paper Trade\n3. Personal or Testing\nYour Choice: ");
+//            if (chooseTrade >= 1 && chooseTrade <= 3) {
+//                break;
+//            } else {
+//                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+//            }
+//        }
+        System.out.println("Ready to take lot size input...");
+        int lotSize = Integer.parseInt(userInput("Please enter lot size: "));
+        System.out.println("User entered lot size: " + lotSize);
 
         try {
-            switch (chooseTrade) {
+            switch (1) {
                 case 1:
-                    Angel_login_Process.login();
-                    StrategyRunner.runADX_FABStrategy();
+                    Angel_login_Process.Papertrade_login();
+//                    Xpath_Validator.validateAllIndicators();
+                   
+                    StrategyRunner.runADX_FABStrategy(lotSize);
                     break;
 
                 case 2:
-                    Angel_login_Process.Papertrade_login();
-                    if (chooseStrgy == 1) {
-                        StrategyRunner.runADX_FABStrategy();
-                    } else if (chooseStrgy == 2) {
-                        StrategyRunner.DMI_MACD_FI();
-                    } else {
-                        System.out.println("Invalid strategy choice.");
-                    }
-                    break;
+//                    Angel_login_Process.Papertrade_login();
+////                    if (chooseStrgy == 1) {
+//                        StrategyRunner.runADX_FABStrategy();
+//                    } else if (chooseStrgy == 2) {
+//                        StrategyRunner.DMI_MACD_FI();
+//                    } else {
+//                        System.out.println("Invalid strategy choice.");
+//                    }
+//                    break;
 
                 case 3:
                 	Xpath_Validator.validateAllIndicators();

@@ -25,4 +25,4 @@ public class WebDriverSingleton {
             instance = null;
         }
     }
-}
+}  

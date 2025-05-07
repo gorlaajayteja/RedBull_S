@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.concurrent.TimeoutException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,9 +12,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ChartReader_Frame2_Shift {
-    
-    // Global scanner instance (do not close it while using it in the app)
-    private static final Scanner scanner = new Scanner(System.in);
     
     public static Map<String, Double> frameToframe() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
@@ -57,18 +52,6 @@ public class ChartReader_Frame2_Shift {
         indicators.put("FB", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_FisherRed));
         
         return indicators;
-    }
-    
-    private static double getValueByTitle(WebDriverWait wait, String title) {
-        String selector = String.format("div[title='%s']", title);
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
-        
-        if (element.isDisplayed()) {
-            String text = element.getText();
-            return parseValue(text);
-        } else {
-            return -0;
-        }
     }
     
     public static double getValueByXPath(String xpath) {

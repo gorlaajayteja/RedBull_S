@@ -1,0 +1,14 @@
+--------------** getValueByTitle_if any XPATH are challanging use this for find values with name inside of Xpath
+private static double getValueByTitle(WebDriverWait wait, String title) {
+        String selector = String.format("div[title='%s']", title);
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
+        
+        if (element.isDisplayed()) {
+            String text = element.getText();
+            return parseValue(text);
+        } else {
+            return -0;
+        }
+    }
+    
+    

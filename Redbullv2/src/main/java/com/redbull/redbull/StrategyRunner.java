@@ -15,13 +15,13 @@ public class StrategyRunner {
 	private static final Logger logger = LoggerFactory.getLogger(StrategyRunner.class);
 
 
-    public static void runADX_FABStrategy() throws InterruptedException {
+    public static void runADX_FABStrategy(int lotSize) throws InterruptedException {
         Map<String, Double> values;
         double adx, fa, fb;
         
 
         // Define the market close time
-        LocalTime marketCloseTime = LocalTime.of(15, 30); // Market closes at 3:30 PM
+        LocalTime marketCloseTime = LocalTime.of(23, 30); // Market closes at 3:30 PM
 
         // Continuous execution until the market closes
         while (LocalTime.now().isBefore(marketCloseTime)) {
@@ -64,13 +64,13 @@ public class StrategyRunner {
 
                 if (fa > fb) {
                     logger.info("📈 Buy CE Signal (FA > FB)");
-                    Buy_Sell_Implemetation.buyCE();
+                    Buy_Sell_Implemetation.buyCE(lotSize);
                     monitorExit("CE");
                     break;
 
                 } else if (fa < fb) {
                     logger.info("📉 Buy PE Signal (FA < FB)");
-                    Buy_Sell_Implemetation.buyPE();
+                    Buy_Sell_Implemetation.buyPE(lotSize);
                     monitorExit("PE");
                     break;
 
@@ -100,6 +100,7 @@ public class StrategyRunner {
 
             double fa = values.get("FA");
             double fb = values.get("FB");
+            System.out.println("FA : "+fa +" FB : "+fb);
 
             if ((positionType.equals("CE") && fa < fb) || (positionType.equals("PE") && fa > fb)) {
                 logger.info("🔁 Exit Signal Detected! Exiting position...");
@@ -118,6 +119,8 @@ public class StrategyRunner {
     public static void DMI_MACD_FI() throws InterruptedException, TimeoutException {
         Map<String, Double> values;
         
+        int lotSize = 0;
+        
         boolean isTradeInitiated = false;
         String positionType = null;
 
@@ -135,7 +138,7 @@ public class StrategyRunner {
                 continue;
             }
 
-            executeTradeStrategy(values, isTradeInitiated, positionType);
+            executeTradeStrategy(values, isTradeInitiated, positionType, lotSize);
         }
 
         logger.info("Market closed. Terminating execution.");
@@ -152,7 +155,7 @@ public class StrategyRunner {
     }
 
     // **Trade Execution Logic**
-    private static void executeTradeStrategy(Map<String, Double> values, boolean isTradeInitiated, String positionType) throws InterruptedException {
+    private static void executeTradeStrategy(Map<String, Double> values, boolean isTradeInitiated, String positionType, int lotSize) throws InterruptedException {
         double ADX = values.get("ADX");
         double MACDG = values.get("MACDG");
         double MACDR = values.get("MACDR");
@@ -171,7 +174,7 @@ public class StrategyRunner {
                 logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
 
                 if (!isTradeInitiated) {
-                    Buy_Sell_Implemetation.buyCE(); // Execute Buy Call
+                    Buy_Sell_Implemetation.buyCE(lotSize); // Execute Buy Call
                     positionType = "CE";
                     isTradeInitiated = true;
                 }
@@ -182,7 +185,7 @@ public class StrategyRunner {
                 logger.info("MACDG: " + MACDG + ", MACDR: " + MACDR + ", PDMI: " + PDMI + ", NDMI: " + NDMI + ", FA: " + FA + ", FB: " + FB);
 
                 if (!isTradeInitiated) {
-                    Buy_Sell_Implemetation.buyPE(); // Execute Buy Put
+                    Buy_Sell_Implemetation.buyPE(lotSize); // Execute Buy Put
                     positionType = "PE";
                     isTradeInitiated = true;
                 }

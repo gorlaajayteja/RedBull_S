@@ -11,6 +11,7 @@ public class Xpath_Validator {
     public static void validateAllIndicators() {
         WebDriver driver = WebDriverSingleton.getInstance();
         driver.get("https://www.angelone.in/trade/watchlist/chart");
+        driver.switchTo().defaultContent();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
         Scanner scanner = new Scanner(System.in);
