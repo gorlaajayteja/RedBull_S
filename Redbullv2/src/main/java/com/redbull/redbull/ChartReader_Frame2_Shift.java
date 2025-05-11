@@ -40,11 +40,11 @@ public class ChartReader_Frame2_Shift {
        
         Map<String, Double> indicators = new HashMap<>();
 //        indicators.put("MACD", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDmiddel));
-        indicators.put("MACDG", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDGreen));
-        indicators.put("MACDR", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDRed));
-        
-        indicators.put("PDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_PDMI));
-        indicators.put("NDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_NDMI));
+//        indicators.put("MACDG", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDGreen));
+//        indicators.put("MACDR", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDRed));
+//        
+//        indicators.put("PDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_PDMI));
+//        indicators.put("NDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_NDMI));
         indicators.put("ADX", getValueByXPath( Angel_Urls_and_Xpaths.Xpath_ADX));
         
         // FA and FB using XPath

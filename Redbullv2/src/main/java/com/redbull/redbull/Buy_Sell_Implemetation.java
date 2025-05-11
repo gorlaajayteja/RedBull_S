@@ -44,7 +44,7 @@ public class Buy_Sell_Implemetation {
             }
 
             logger.info("✅ Found Order Type Toggle | Text: {}", orderTypeText);
-            if (!orderTypeText.equalsIgnoreCase("LIMIT")) {
+            if (!orderTypeText.equalsIgnoreCase("MKT")) {
                 orderTypeToggle.click();
                 logger.info("🔁 Changed Order Type to MKT.");
             }
@@ -81,13 +81,16 @@ public class Buy_Sell_Implemetation {
             WebElement buyButton = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(text(),'BUY @')]")));
             logger.info("🟢 BUY Button Found: {}", buyButton.getText());
+            Thread.sleep(2000);
             buyButton.click();
 
             // Step 2: Wait for "CONFIRM ORDER" button and click
             WebElement confirmButton = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(text(), 'CONFIRM ORDER')]")));
-            logger.info("🟦 Confirm Order Button Found: {}", confirmButton.getText());
+            
             confirmButton.click();
+            Thread.sleep(2000);
+            logger.info("🟦 Confirm Order Button Found: {}", confirmButton.getText());
 
         } catch (TimeoutException | NoSuchElementException e) {
             logger.error("❌ Element not found or not clickable. Reason: {}", e.getMessage());
