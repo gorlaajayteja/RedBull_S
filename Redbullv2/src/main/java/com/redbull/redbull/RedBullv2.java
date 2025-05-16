@@ -33,8 +33,8 @@ public class RedBullv2 {
 
     public static void main(String[] args) {
         SpringApplication.run(RedBullv2.class, args);
-        System.out.println(InstructionMassages.greeting);
-        System.out.println(InstructionMassages.Redbull_Activated);
+//        System.out.println(InstructionMassages.greeting);
+//        System.out.println(InstructionMassages.Redbull_Activated);
 
 //        int chooseStrgy = userIntInput("Choose your Strategy:\n1. ADX_Fisher\n2. DMI, MACD, Fisher\nYour Choice: ");
 //        int chooseTrade;
@@ -48,8 +48,9 @@ public class RedBullv2 {
 //                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
 //            }
 //        }
-        System.out.println("Ready to take lot size input...");
-        int lotSize = Integer.parseInt(userInput("Please enter lot size: "));
+//        System.out.println("Ready to take lot size input...");
+//        int lotSize = Integer.parseInt(userInput("Please enter lot size: "));
+        int lotSize = 1;
         System.out.println("User entered lot size: " + lotSize);
 
         try {

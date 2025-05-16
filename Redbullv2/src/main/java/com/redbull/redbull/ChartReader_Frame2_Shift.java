@@ -3,10 +3,10 @@ package com.redbull.redbull;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -40,11 +40,11 @@ public class ChartReader_Frame2_Shift {
        
         Map<String, Double> indicators = new HashMap<>();
 //        indicators.put("MACD", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDmiddel));
-//        indicators.put("MACDG", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDGreen));
-//        indicators.put("MACDR", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDRed));
-//        
-//        indicators.put("PDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_PDMI));
-//        indicators.put("NDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_NDMI));
+        indicators.put("MACDG", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDGreen));
+        indicators.put("MACDR", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_MACDRed));
+        
+        indicators.put("PDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_PDMI));
+        indicators.put("NDMI", getValueByXPath(Angel_Urls_and_Xpaths.Xpath_NDMI));
         indicators.put("ADX", getValueByXPath( Angel_Urls_and_Xpaths.Xpath_ADX));
         
         // FA and FB using XPath
@@ -68,10 +68,20 @@ public class ChartReader_Frame2_Shift {
 			            String text = element.getText();
 			            return parseValue(text);
 			        }
-			    } catch (NoSuchElementException e) {
+			    } catch (WebDriverException  e) {
 			        System.out.println("❌ XPath failed: " + xpath);
-			        System.out.print("Enter a new XPath for this element: ");
-			        xpath = scanner.nextLine(); // Get new XPath from user
+			        driver.get("https://www.angelone.in/trade/watchlist/chart");
+			        
+			        // Switching to the first iframe where the chart is expected to be located
+			        WebElement iframe1 = wait.until(
+			                ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='scrip chart']")));
+			        driver.switchTo().frame(iframe1);
+
+			        // Switching to the second nested iframe where financial details are displayed
+			        WebElement iframe2 = wait.until(
+			                ExpectedConditions.visibilityOfElementLocated(By.xpath("//iframe[@title='Financial Chart']")));
+			        driver.switchTo().frame(iframe2);
+			        
 			    }
 			}
 		}

@@ -25,7 +25,8 @@ public class StrategyRunner {
 
         // Continuous execution until the market closes
         while (LocalTime.now().isBefore(marketCloseTime)) {
-            logger.info("Starting a new strategy cycle...");
+            logger.info("Redbull thinking.....");
+            
 
             // Step 1: Wait until ADX > 20
             while (true) {
