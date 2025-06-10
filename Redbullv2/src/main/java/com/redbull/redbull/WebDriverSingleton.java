@@ -3,7 +3,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-
 public class WebDriverSingleton {
     private static WebDriver instance;
 
@@ -14,7 +13,6 @@ public class WebDriverSingleton {
             WebDriverManager.chromedriver().setup(); // Ensure the ChromeDriver is properly set up
             instance = new ChromeDriver(); // Create the WebDriver instance
             instance.manage().window().maximize(); // Configure the instance
-            
         }
         return instance;
     }
@@ -25,4 +23,4 @@ public class WebDriverSingleton {
             instance = null;
         }
     }
-}  
+}

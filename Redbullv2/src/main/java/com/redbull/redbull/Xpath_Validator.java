@@ -13,7 +13,7 @@ public class Xpath_Validator {
         driver.get("https://www.angelone.in/trade/watchlist/chart");
         driver.switchTo().defaultContent();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         Scanner scanner = new Scanner(System.in);
 
         // ✅ Corrected: Only raw field names, not fully qualified with class name

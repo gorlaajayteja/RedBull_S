@@ -15,7 +15,7 @@ public class Positions {
 
     public static void Exit_postions() throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 
         try {
             driver.switchTo().defaultContent();
@@ -36,7 +36,7 @@ public class Positions {
             Exit_postions.click();
             Thread.sleep(2000);
 
-            logger.info("Positions exited successfully");
+            TradeLogger.log("Positions exited successfully");
 
         } catch (Exception e) {
             logger.error("Exception occurred while exiting positions", e);

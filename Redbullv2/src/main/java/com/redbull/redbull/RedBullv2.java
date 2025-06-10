@@ -1,95 +1,98 @@
 package com.redbull.redbull;
 
 import java.util.Scanner;
+import java.util.Set;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.openqa.selenium.WebDriver;
 
-@SpringBootApplication
 public class RedBullv2 {
-    private static final Scanner scanner = new Scanner(System.in); // Single shared scanner
-
-    public static String userInput(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
-    }
-
-    public static int userIntInput(String prompt) {
-        while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine();
-            try {
-                return Integer.parseInt(input.trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
-            }
-        }
-    }
-
-
-    public static void closeScanner() {
-        scanner.close();
-    }
+    static final Scanner scanner = new Scanner(System.in); // Single shared scanner
 
     public static void main(String[] args) {
-        SpringApplication.run(RedBullv2.class, args);
-//        System.out.println(InstructionMassages.greeting);
-//        System.out.println(InstructionMassages.Redbull_Activated);
-
-//        int chooseStrgy = userIntInput("Choose your Strategy:\n1. ADX_Fisher\n2. DMI, MACD, Fisher\nYour Choice: ");
-//        int chooseTrade;
-
-        // Validating trading type
-//        while (true) {
-//            chooseTrade = userIntInput("Choose Trading Mode:\n1. Real Trade\n2. Paper Trade\n3. Personal or Testing\nYour Choice: ");
-//            if (chooseTrade >= 1 && chooseTrade <= 3) {
-//                break;
-//            } else {
-//                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
-//            }
-//        }
-//        System.out.println("Ready to take lot size input...");
-//        int lotSize = Integer.parseInt(userInput("Please enter lot size: "));
-        int lotSize = 1;
-        System.out.println("User entered lot size: " + lotSize);
+        System.out.println("🚀 Welcome to RedBull Trader!");
+        System.out.println("🚀 Choose Trading Type\n"+"1. NIFTY AND SENSEX\n"+"2. CRUDEOIL OR OTHER INDEX FOR OPTION'S\n"+"3. Stock's");
+        int choice = scanner.nextInt();
+        int lotSize = 3;
+//        System.out.println("🧾 Lot size selected: " + lotSize);
+//        StockList.buyList.add("ETERNAL");
+//        StockList.buyList.add("ONGC");
+//        StockList.sellList.add("ASHOKLEY");
+//        StockList.sellList.add("WIPRO");
 
         try {
-            switch (1) {
-                case 1:
+            switch (choice) {
+                case 1:// NIFTY AND SENSEX
                     Angel_login_Process.Papertrade_login();
-//                    Xpath_Validator.validateAllIndicators();
-                   
+                    System.out.println("Boss! Please ensure the index and Chart setting... and confirm with YES");
+                    String con = scanner.next();
+                    System.out.println("Thannks for the confirmation.... Moveing to RedBull......"+con);
                     StrategyRunner.runADX_FABStrategy(lotSize);
+                    
+                    break;
+                case 2: //CRUDEOIL
+//                	System.out.println("Please provide the Index for Option Trading");
+//                	String indexOp = scanner.next();
+                	String indexOp = "CRUDEOIL MCX ";//+ HomeSearch.getThirdFriday();
+                    Angel_login_Process.Papertrade_login();
+                    StrategyRunner.otherIndexOP(lotSize, indexOp );
                     break;
 
-                case 2:
-//                    Angel_login_Process.Papertrade_login();
-////                    if (chooseStrgy == 1) {
-//                        StrategyRunner.runADX_FABStrategy();
-//                    } else if (chooseStrgy == 2) {
-//                        StrategyRunner.DMI_MACD_FI();
-//                    } else {
-//                        System.out.println("Invalid strategy choice.");
-//                    }
-//                    break;
+                case 3://STOCKS
+                    System.out.println("🟢 Stock Trading Mode Activated");
+                    InstructionMassages.instructions();
 
-                case 3:
-                	Xpath_Validator.validateAllIndicators();
-                	System.out.println("Testing");
+                    // Load stock list
+                    Set<String> stocks = StockListCollectFromUser.stocklist();
+                    System.out.println("📃 Tracking Stocks: " + stocks);
 
+                    // Add test stocks to Buy/Sell lists
+                    StockList.buyList.add("Open Buy list:");
+                    StockList.sellList.add("Open Sell list:");
+
+                    // Open chart page
+                    WebDriver driver = WebDriverSingleton.getInstance();
+                    driver.get("https://www.angelone.in/trade/watchlist/chart");
+
+                 // Wait for manual login
+                    if (System.console() != null) {
+                        System.out.println("🟡 Please complete login and press ENTER to continue...");
+                        System.console().readLine();
+                    } else {
+                        System.out.println("⚠️ Console not available. Waiting 60 seconds...");
+                        Thread.sleep(60000);
+                    }
+                    System.out.println("✅ Login confirmed — Starting signal cycles");
+
+
+                    // Run signal detection in loop
+                    for (int i = 0; i < 5000; i++) {
+                        for (String stock : stocks) {
+                            try {
+                                System.err.println("🧠 RedBull engines on — decoding market behavior for: " + stock);
+                                StrategyRunner.StockStategy(lotSize, stock); // One signal check per stock
+                            } catch (Exception e) {
+                                System.err.println("❌ Error processing stock " + stock + ": " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }
+                        System.out.println(StockList.buyList);
+                        System.out.println(StockList.sellList);
+                        System.out.println("**************************************************************************************************************" + i);
+                        
+
+                        Thread.sleep(10000); // Optional: wait before starting next cycle
+                    }
+                    break;
 
                 default:
-                    System.out.println("Unexpected error in trade selection.");
+                    System.out.println("❗ Unexpected choice. Exiting.");
             }
         } catch (InterruptedException e) {
-            System.out.println("Execution interrupted: " + e.getMessage());
+            System.out.println("⚠️ Execution interrupted: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("An unexpected error occurred: " + e.getMessage());
+            System.out.println("🚨 An unexpected error occurred: " + e.getMessage());
             e.printStackTrace();
-        } 
-//        finally {
-//            closeScanner(); // Safely close scanner once done
-//        }
+        }
     }
 }

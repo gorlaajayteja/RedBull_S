@@ -3,14 +3,11 @@ package com.redbull.redbull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
 public class Buy_Sell_Implemetation {
 
-    private static final Logger logger = LoggerFactory.getLogger(Buy_Sell_Implemetation.class);
 
     public static void buyCE(int lotSize) throws InterruptedException {
         executeBuy("CALL", lotSize);
@@ -22,7 +19,7 @@ public class Buy_Sell_Implemetation {
 
     private static void executeBuy(String optionType, int lotSize) throws InterruptedException {
         WebDriver driver = WebDriverSingleton.getInstance();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 
         try {
             driver.get("https://www.angelone.in/trade/watchlist/chart");
@@ -37,16 +34,16 @@ public class Buy_Sell_Implemetation {
             String optionTypeText = optionTypeToggle.getText().trim();
             String orderTypeText = orderTypeToggle.getText().trim();
 
-            logger.info("✅ Found Option Type Toggle | Text: {}", optionTypeText);
+            System.out.println("✅ Found Option Type Toggle | Text: {}"+ optionTypeText);
             if (!optionTypeText.equalsIgnoreCase(optionType)) {
                 optionTypeToggle.click();
-                logger.info("🔁 Changed Option Type to {}", optionType);
+                System.out.println("🔁 Changed Option Type to {}"+ optionType);
             }
 
-            logger.info("✅ Found Order Type Toggle | Text: {}", orderTypeText);
+            System.out.println("✅ Found Order Type Toggle | Text: {}"+ orderTypeText);
             if (!orderTypeText.equalsIgnoreCase("MKT")) {
-                orderTypeToggle.click();
-                logger.info("🔁 Changed Order Type to MKT.");
+            		orderTypeToggle.click();
+                System.out.println("🔁 Changed Order Type to MKT.");
             }
 
             // Select ATM strike
@@ -64,11 +61,9 @@ public class Buy_Sell_Implemetation {
             String price = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//*[contains(@id,'strikePrice_select|ATM|scrip_')]/div/div[3]/div/div/span/span[1]"))).getText();
 
-            logger.info(String.format("Strike: %s, ATM: %s, %s: %s", strikePrice, atmValue, contractType, price));
+            System.out.println(String.format("Strike: %s, ATM: %s, %s: %s", strikePrice, atmValue, contractType, price));
             ATM_button.click();
             
-            System.err.println("Check lots size");
-            Thread.sleep(5000);
             for(int i=1;i<lotSize;i++) {
             WebElement triangleIcon = wait.until(ExpectedConditions.elementToBeClickable(
             	    By.cssSelector("span.icon-triangle-round.text-skin-neutralCaption.cursor-pointer")));
@@ -80,7 +75,7 @@ public class Buy_Sell_Implemetation {
             // Step 1: Click the "BUY @" button using partial text match (more stable)
             WebElement buyButton = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(text(),'BUY @')]")));
-            logger.info("🟢 BUY Button Found: {}", buyButton.getText());
+            System.out.println("🟢 BUY Button Found: {}"+ buyButton.getText());
             Thread.sleep(2000);
             buyButton.click();
 
@@ -90,12 +85,12 @@ public class Buy_Sell_Implemetation {
             
             confirmButton.click();
             Thread.sleep(2000);
-            logger.info("🟦 Confirm Order Button Found: {}", confirmButton.getText());
+            System.out.println("🟦 Confirm Order Button Found: {}" +confirmButton.getText());
 
         } catch (TimeoutException | NoSuchElementException e) {
-            logger.error("❌ Element not found or not clickable. Reason: {}", e.getMessage());
+        	System.out.println("❌ Element not found or not clickable. Reason: {}"+ e.getMessage());
         } catch (Exception e) {
-            logger.error("❌ Unexpected error during buy{}: {}", optionType, e.getMessage());
+        	System.out.println("❌ Unexpected error during buy{}: {}"+ optionType + e.getMessage());
         }
     }
 }
