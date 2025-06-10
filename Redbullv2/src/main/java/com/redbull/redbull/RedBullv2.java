@@ -75,7 +75,7 @@ public class RedBullv2 {
 
                 case 3:
                 	Xpath_Validator.validateAllIndicators();
-
+                	System.out.println("Testing");
 
 
                 default:
